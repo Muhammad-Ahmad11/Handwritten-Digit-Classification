@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Digit Classification</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <h1>Handwritten Digit Classification</h1>
+    <form action="/predict" method="post" enctype="multipart/form-data">
+        <input type="file" name="image" accept=".png, .jpg, .jpeg" required>
+        <input type="submit" value="Predict">
+    </form>
+    <h2>Prediction:</h2>
+    <p id="prediction"></p>
+
+    <script>
+        // Display the prediction result
+        const form = document.querySelector('form');
+        form.addEventListener('submit', (event) => {
+            event.preventDefault();
+            const fileInput = document.querySelector('input[type="file"]');
+            const formData = new FormData();
+            formData.append('image', fileInput.files[0]);
+            
+            fetch('/predict', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.text())
+            .then(prediction => {
+                document.getElementById('prediction').textContent = `Predicted Label: ${prediction}`;
+            });
+        });
+    </script>
+</body>
+</html>
